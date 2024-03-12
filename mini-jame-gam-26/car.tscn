@@ -1,0 +1,88 @@
+[gd_scene load_steps=10 format=3 uid="uid://mwm46erchped"]
+
+[ext_resource type="Script" path="res://car.gd" id="1_k2qnu"]
+[ext_resource type="Material" uid="uid://dg8kragn1utw8" path="res://assets/car_body_material.tres" id="2_x0igc"]
+[ext_resource type="Script" path="res://respawn_animation.gd" id="3_o6va3"]
+[ext_resource type="Material" uid="uid://bf5yhr7bwg6ns" path="res://assets/wheel_material.tres" id="3_th057"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sqlkc"]
+albedo_color = Color(0.2, 0.2, 0.2, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_87cub"]
+material = SubResource("StandardMaterial3D_sqlkc")
+height = 0.2
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_vt6jb"]
+material = ExtResource("2_x0igc")
+radius = 0.9
+height = 4.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_gyj4n"]
+material = ExtResource("3_th057")
+size = Vector3(0.2, 0.3, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3i6ta"]
+radius = 0.9
+height = 4.0
+
+[node name="Car" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("1_k2qnu")
+
+[node name="VehicleBody3D" type="VehicleBody3D" parent="."]
+
+[node name="VehicleWheel3D" type="VehicleWheel3D" parent="VehicleBody3D"]
+transform = Transform3D(0.000174479, 0, 1, 0, 1, 0, -1, 0, 0.000174479, 1, -0.5, 1)
+use_as_steering = true
+wheel_roll_influence = 0.01
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleBody3D/VehicleWheel3D"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_87cub")
+
+[node name="VehicleWheel3D2" type="VehicleWheel3D" parent="VehicleBody3D"]
+transform = Transform3D(0.000174479, 0, 1, 0, 1, 0, -1, 0, 0.000174479, -1, -0.5, 1)
+use_as_traction = true
+wheel_roll_influence = 0.01
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleBody3D/VehicleWheel3D2"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_87cub")
+
+[node name="VehicleWheel3D3" type="VehicleWheel3D" parent="VehicleBody3D"]
+transform = Transform3D(0.000174479, 0, 1, 0, 1, 0, -1, 0, 0.000174479, 1, -0.5, -1)
+use_as_steering = true
+wheel_roll_influence = 0.01
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleBody3D/VehicleWheel3D3"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_87cub")
+
+[node name="VehicleWheel3D4" type="VehicleWheel3D" parent="VehicleBody3D"]
+transform = Transform3D(0.000174479, 0, 1, 0, 1, 0, -1, 0, 0.000174479, -1, -0.5, -1)
+use_as_traction = true
+wheel_roll_influence = 0.01
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleBody3D/VehicleWheel3D4"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_87cub")
+
+[node name="CarBody" type="MeshInstance3D" parent="VehicleBody3D"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_vt6jb")
+
+[node name="Sunglasses" type="MeshInstance3D" parent="VehicleBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.77152, 0.340394, 0)
+mesh = SubResource("BoxMesh_gyj4n")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_3i6ta")
+
+[node name="StuckTimer" type="Timer" parent="."]
+
+[node name="RespawnAnimation" type="Node" parent="." node_paths=PackedStringArray("meshes")]
+script = ExtResource("3_o6va3")
+meshes = [NodePath("../VehicleBody3D/VehicleWheel3D/MeshInstance3D"), NodePath("../VehicleBody3D/CarBody"), NodePath("../VehicleBody3D/Sunglasses")]
+
+[connection signal="timeout" from="StuckTimer" to="." method="_on_stuck_timer_timeout"]

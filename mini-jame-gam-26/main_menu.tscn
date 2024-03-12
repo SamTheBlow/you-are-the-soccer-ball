@@ -1,0 +1,108 @@
+[gd_scene load_steps=10 format=3 uid="uid://ddd2ivagy1px1"]
+
+[ext_resource type="Script" path="res://main_menu.gd" id="1_wvq5e"]
+[ext_resource type="PackedScene" uid="uid://cms8nsarpleqa" path="res://ball.tscn" id="2_gekmx"]
+[ext_resource type="Script" path="res://spotlight.gd" id="2_jocag"]
+[ext_resource type="Texture2D" uid="uid://cyf4vas6i6vg7" path="res://assets/playbutton1.png" id="2_nw8uu"]
+[ext_resource type="AudioStream" uid="uid://dhfahipy1kdux" path="res://assets/music/main_menu.wav" id="5_21adv"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vjt1n"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_kijew"]
+material = SubResource("StandardMaterial3D_vjt1n")
+size = Vector2(2000, 2000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_oqblq"]
+size = Vector3(2000, 1, 2000)
+
+[sub_resource type="Environment" id="Environment_pmsds"]
+background_mode = 1
+
+[node name="MainMenu" type="Node"]
+script = ExtResource("1_wvq5e")
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Node3D" node_paths=PackedStringArray("ball")]
+transform = Transform3D(1, 0, 0, 0, 0.770925, 0.636926, 0, -0.636926, 0.770925, 0, 9.00945, 12.2121)
+light_energy = 10.0
+spot_range = 20.0
+script = ExtResource("2_jocag")
+ball = NodePath("../Ball")
+
+[node name="Ball" parent="Node3D" instance=ExtResource("2_gekmx")]
+transform = Transform3D(-0.101101, -0.289493, -0.951826, 0.43398, 0.848071, -0.304033, 0.895232, -0.443811, 0.0398934, 0, 3.38922, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 0.994703, 0.102793, 0, -0.102793, 0.994703, 11.91, 5.32582, 13.7544)
+
+[node name="Node3D" type="Node3D" parent="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D/Node3D"]
+mesh = SubResource("PlaneMesh_kijew")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Node3D/Node3D"]
+collision_layer = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/Node3D/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_oqblq")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Node3D"]
+environment = SubResource("Environment_pmsds")
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="UI" type="Control" parent="UILayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UILayer/UI"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -236.0
+offset_bottom = 81.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/normal_font_size = 24
+bbcode_enabled = true
+text = "[center]We are playing soccer, but you are the ball.
+
+If you get sent into one of the goals, you will explode and lose the game.
+
+If you manage to stay alive the entire game, you win. 
+The less fun the game is for the players, the more points you get!
+
+WASD to move; Space to jump"
+
+[node name="PlayButton" type="TextureButton" parent="UILayer/UI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -323.0
+offset_top = -4.0
+offset_right = 323.0
+offset_bottom = 342.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+pivot_offset = Vector2(323, 173)
+texture_normal = ExtResource("2_nw8uu")
+stretch_mode = 4
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_21adv")
+autoplay = true
+
+[connection signal="pressed" from="UILayer/UI/PlayButton" to="." method="_on_play_button_pressed"]

@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3 uid="uid://cms8nsarpleqa"]
+
+[ext_resource type="Script" path="res://ball.gd" id="1_xlhjl"]
+[ext_resource type="Texture2D" uid="uid://bwwpnrmq4114p" path="res://assets/ball.png" id="2_cyh8k"]
+[ext_resource type="Script" path="res://explosion_animation.gd" id="3_qqttv"]
+[ext_resource type="PackedScene" uid="uid://duuhp6nycslju" path="res://explosion_effect.tscn" id="4_tifp6"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0aoab"]
+friction = 0.1
+bounce = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aq2ja"]
+albedo_texture = ExtResource("2_cyh8k")
+uv1_scale = Vector3(1.365, 0.8, 1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_xuume"]
+radius = 1.5
+
+[node name="Ball" type="Node3D" node_paths=PackedStringArray("body", "raycast") groups=["player"]]
+script = ExtResource("1_xlhjl")
+body = NodePath("RigidBody3D")
+raycast = NodePath("RayCast3D")
+speed = 50.0
+jump_strength = 100.0
+radius = 1.5
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+collision_layer = 2
+mass = 0.15
+physics_material_override = SubResource("PhysicsMaterial_0aoab")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="RigidBody3D"]
+light_energy = 10.0
+omni_range = 20.0
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="RigidBody3D"]
+radius = 1.5
+rings = 12
+material = SubResource("StandardMaterial3D_aq2ja")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+shape = SubResource("SphereShape3D_xuume")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, -1000, 0)
+collision_mask = 4
+hit_from_inside = true
+
+[node name="ExplosionAnimation" type="Node" parent="." node_paths=PackedStringArray("ball")]
+script = ExtResource("3_qqttv")
+explosion_effect_scene = ExtResource("4_tifp6")
+ball = NodePath("..")

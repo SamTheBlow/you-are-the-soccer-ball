@@ -1,0 +1,435 @@
+[gd_scene load_steps=26 format=3 uid="uid://3yily3j5523a"]
+
+[ext_resource type="Script" path="res://game.gd" id="1_cffgu"]
+[ext_resource type="PackedScene" uid="uid://mwm46erchped" path="res://car.tscn" id="2_0e2wb"]
+[ext_resource type="PackedScene" uid="uid://bto5bpvf8yco2" path="res://stage.tscn" id="2_1dumt"]
+[ext_resource type="PackedScene" uid="uid://1mpobgkuya1r" path="res://car3.tscn" id="2_1flua"]
+[ext_resource type="PackedScene" uid="uid://cms8nsarpleqa" path="res://ball.tscn" id="2_5pmen"]
+[ext_resource type="PackedScene" uid="uid://t8ddi04vybno" path="res://field.tscn" id="3_36slx"]
+[ext_resource type="PackedScene" uid="uid://f23vgk3twxdv" path="res://car2.tscn" id="3_capmd"]
+[ext_resource type="PackedScene" uid="uid://qpnikgavx6ny" path="res://car4.tscn" id="3_uv43r"]
+[ext_resource type="Script" path="res://game_camera.gd" id="6_uuv2b"]
+[ext_resource type="Texture2D" uid="uid://d2m8e6wf7v6a3" path="res://assets/grass.png" id="7_eugpu"]
+[ext_resource type="Texture2D" uid="uid://bq5w3rue0o54r" path="res://assets/score.png" id="11_rsdx3"]
+[ext_resource type="AudioStream" uid="uid://b4nf5va3adyb8" path="res://assets/music/bgm.wav" id="12_tosst"]
+[ext_resource type="Texture2D" uid="uid://diuvef3it6l7b" path="res://assets/play_again.png" id="12_yweea"]
+[ext_resource type="AudioStream" uid="uid://sa0urkscmwmk" path="res://assets/music/goal.mp3" id="13_e6xng"]
+[ext_resource type="AudioStream" uid="uid://cn07ampu6ny83" path="res://assets/music/countdown.mp3" id="14_dy6dx"]
+[ext_resource type="AudioStream" uid="uid://5e5npxlkiisn" path="res://assets/music/game_over.mp3" id="15_ykagt"]
+[ext_resource type="AudioStream" uid="uid://dgigiidkud4mx" path="res://assets/music/victory.mp3" id="16_le3x8"]
+[ext_resource type="AudioStream" uid="uid://ba801b5pwdjx1" path="res://assets/music/win_fanfare.mp3" id="17_jx4xo"]
+
+[sub_resource type="Environment" id="Environment_lykpu"]
+background_mode = 1
+background_color = Color(0.3, 0.708333, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_omyru"]
+albedo_texture = ExtResource("7_eugpu")
+uv1_scale = Vector3(62.5, 12.5, 4)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_da7rv"]
+material = SubResource("StandardMaterial3D_omyru")
+size = Vector2(1000, 200)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sjxsd"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wciqt"]
+material = SubResource("StandardMaterial3D_sjxsd")
+size = Vector2(5, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bir50"]
+size = Vector3(5, 1, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_imqm1"]
+size = Vector3(1000, 1, 200)
+
+[node name="Game" type="Node" node_paths=PackedStringArray("music_bgm", "music_goal", "music_countdown", "music_game_over", "music_victory", "music_fanfare", "cars", "field", "player", "timer_label", "score_label", "score_team_a_label", "score_team_b_label", "bgm_timer", "goal_timer", "end_timer", "podium")]
+script = ExtResource("1_cffgu")
+music_bgm = NodePath("BGM")
+music_goal = NodePath("Goal")
+music_countdown = NodePath("Countdown")
+music_game_over = NodePath("GameOver")
+music_victory = NodePath("Victory")
+music_fanfare = NodePath("WinFanfare")
+ball_scene = ExtResource("2_5pmen")
+cars = [NodePath("World/Car1"), NodePath("World/Car2"), NodePath("World/Car3"), NodePath("World/Car4"), NodePath("World/Car5"), NodePath("World/Car6"), NodePath("World/Car7"), NodePath("World/Car8")]
+field = NodePath("World/Field")
+player = NodePath("World/Ball")
+timer_label = NodePath("UILayer/UI/TimerLabel")
+score_label = NodePath("UILayer/UI/Control/Margin/ScoreLabel")
+score_team_a_label = NodePath("UILayer/UI/ScoreTeamA")
+score_team_b_label = NodePath("UILayer/UI/ScoreTeamB")
+bgm_timer = NodePath("BgmTimer")
+goal_timer = NodePath("GoalTimer")
+end_timer = NodePath("EndTimer")
+podium = NodePath("World/Podium/Marker3D")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_lykpu")
+
+[node name="World" type="Node3D" parent="."]
+
+[node name="Car1" parent="World" instance=ExtResource("2_1flua")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.216, 3, 0)
+
+[node name="Car2" parent="World" instance=ExtResource("3_uv43r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31, 3, -17)
+
+[node name="Car3" parent="World" instance=ExtResource("3_capmd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35, 3, 5)
+
+[node name="Car4" parent="World" instance=ExtResource("2_0e2wb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 3, 20)
+
+[node name="Car5" parent="World" instance=ExtResource("2_1flua")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 7.216, 3, 0)
+team = 2
+
+[node name="Car6" parent="World" instance=ExtResource("3_capmd")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 35, 3, -5)
+team = 2
+
+[node name="Car7" parent="World" instance=ExtResource("3_uv43r")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 31, 3, 17)
+team = 2
+
+[node name="Car8" parent="World" instance=ExtResource("2_0e2wb")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 25, 3, -20)
+team = 2
+
+[node name="Ball" parent="World" instance=ExtResource("2_5pmen")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.88114, 0)
+
+[node name="Stage" parent="World" instance=ExtResource("2_1dumt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -98.8777)
+
+[node name="Field" parent="World" instance=ExtResource("3_36slx")]
+
+[node name="Camera3D" type="Camera3D" parent="World" node_paths=PackedStringArray("player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 40)
+current = true
+script = ExtResource("6_uuv2b")
+player = NodePath("../Ball")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World"]
+mesh = SubResource("PlaneMesh_da7rv")
+
+[node name="Podium" type="Node3D" parent="World"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.174, 19.345, 63.762)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Podium"]
+mesh = SubResource("PlaneMesh_wciqt")
+
+[node name="Marker3D" type="Marker3D" parent="World/Podium"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="World/Podium"]
+collision_layer = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Podium/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_bir50")
+
+[node name="PodiumCamera" type="Camera3D" parent="World/Podium"]
+unique_name_in_owner = true
+transform = Transform3D(0.970716, -0.168378, 0.171343, 0, 0.71325, 0.700909, -0.240228, -0.680384, 0.692364, 4.205, 4.355, 2.54)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+collision_layer = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/StaticBody3D"]
+shape = SubResource("BoxShape3D_imqm1")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.5, -0.852868, 0.150384, 0, 0.173648, 0.984808, -0.866025, -0.492404, 0.086824, 0, 10, 0)
+light_energy = 2.0
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="UI" type="Control" parent="UILayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TimerLabel" type="Label" parent="UILayer/UI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.06
+anchor_top = 0.05
+anchor_right = 0.2
+anchor_bottom = 0.15
+theme_override_font_sizes/font_size = 36
+text = "3:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ColorRect" type="ColorRect" parent="UILayer/UI/TimerLabel"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.14902, 0.14902, 0.14902, 1)
+
+[node name="Control" type="Control" parent="UILayer/UI"]
+layout_mode = 1
+anchor_left = 0.7
+anchor_top = 0.05
+anchor_right = 0.95
+anchor_bottom = 0.15
+
+[node name="Margin" type="Control" parent="UILayer/UI/Control"]
+layout_mode = 1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="UILayer/UI/Control/Margin"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "Score:"
+vertical_alignment = 1
+
+[node name="ScoreLabel" type="Label" parent="UILayer/UI/Control/Margin"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ColorRect" type="ColorRect" parent="UILayer/UI/Control"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.14902, 0.14902, 0.14902, 1)
+
+[node name="ScoreMessages" type="RichTextLabel" parent="UILayer/UI"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7
+anchor_top = 0.15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/normal_font_size = 20
+
+[node name="Points" type="TextureRect" parent="UILayer/UI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -331.0
+offset_right = 346.0
+offset_bottom = 327.0
+grow_horizontal = 2
+scale = Vector2(0.4, 0.4)
+pivot_offset = Vector2(326.5, 0)
+texture = ExtResource("11_rsdx3")
+stretch_mode = 5
+
+[node name="ScoreTeamA" type="Label" parent="UILayer/UI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -64.0
+offset_right = -32.0
+offset_bottom = 100.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 64
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScoreTeamB" type="Label" parent="UILayer/UI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 32.0
+offset_right = 64.0
+offset_bottom = 100.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 64
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GameOverScreen" type="Control" parent="UILayer/UI"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="UILayer/UI/GameOverScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -189.0
+offset_top = -56.5
+offset_right = 189.0
+offset_bottom = 56.5
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.34902, 0.34902, 0.34902, 1)
+
+[node name="Label" type="Label" parent="UILayer/UI/GameOverScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 64
+text = "You died..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayAgain" type="TextureButton" parent="UILayer/UI/GameOverScreen"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.677
+anchor_right = 0.5
+anchor_bottom = 0.769
+offset_left = -140.0
+offset_top = -36.696
+offset_right = 140.0
+offset_bottom = 76.688
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("12_yweea")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="WinScreen" type="Control" parent="UILayer/UI"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="UILayer/UI/WinScreen"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.275
+anchor_right = 0.75
+anchor_bottom = 0.575
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.34902, 0.34902, 0.34902, 1)
+
+[node name="Label" type="Label" parent="UILayer/UI/WinScreen"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.85
+theme_override_font_sizes/font_size = 64
+text = "YOU WIN!!
+muahahahahaha"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayAgain" type="TextureButton" parent="UILayer/UI/WinScreen"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.677
+anchor_right = 0.5
+anchor_bottom = 0.769
+offset_left = -140.0
+offset_top = -36.696
+offset_right = 140.0
+offset_bottom = 76.688
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("12_yweea")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("12_tosst")
+
+[node name="Goal" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("13_e6xng")
+
+[node name="Countdown" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("14_dy6dx")
+
+[node name="GameOver" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("15_ykagt")
+
+[node name="Victory" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("16_le3x8")
+
+[node name="WinFanfare" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("17_jx4xo")
+
+[node name="GoalTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[node name="CountdownTimer" type="Timer" parent="."]
+wait_time = 2.7
+one_shot = true
+autostart = true
+
+[node name="BgmTimer" type="Timer" parent="."]
+wait_time = 1.7
+one_shot = true
+
+[node name="EndTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="pressed" from="UILayer/UI/GameOverScreen/PlayAgain" to="." method="_on_play_again_pressed"]
+[connection signal="pressed" from="UILayer/UI/WinScreen/PlayAgain" to="." method="_on_play_again_pressed"]
+[connection signal="timeout" from="GoalTimer" to="." method="_on_goal_timer_timeout"]
+[connection signal="timeout" from="CountdownTimer" to="." method="_on_countdown_timer_timeout"]
+[connection signal="timeout" from="BgmTimer" to="." method="_on_bgm_timer_timeout"]
+[connection signal="timeout" from="EndTimer" to="." method="_on_end_timer_timeout"]

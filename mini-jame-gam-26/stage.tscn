@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://bto5bpvf8yco2"]
+
+[ext_resource type="Texture2D" uid="uid://djpr4ty2xbaoa" path="res://assets/crowd.png" id="1_sx7lw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_taa6a"]
+albedo_color = Color(0.168627, 0.168627, 0.168627, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cyx0j"]
+albedo_texture = ExtResource("1_sx7lw")
+uv1_scale = Vector3(40, 3, 0)
+texture_filter = 4
+
+[node name="Stage" type="Node3D"]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+size = Vector3(1000, 3, 50)
+material = SubResource("StandardMaterial3D_taa6a")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(-3.78552e-08, 2.18557e-08, 1, 0.5, 0.866025, 0, -0.866025, 0.5, -4.37114e-08, 0, 14.193, 0)
+size = Vector3(56, 3, 1000)
+material = SubResource("StandardMaterial3D_cyx0j")
